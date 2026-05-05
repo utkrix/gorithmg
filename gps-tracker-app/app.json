@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "GPS Tracker",
+    "slug": "gps-tracker-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0f1a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs your location to send GPS coordinates to the tracking server.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs your location to continuously send GPS coordinates to the tracking server."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0f1a"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow GPS Tracker to use your location to send coordinates to the server.",
+          "locationAlwaysPermission": "Allow GPS Tracker to use your location in the background.",
+          "locationWhenInUsePermission": "Allow GPS Tracker to use your location while using the app."
+        }
+      ]
+    ]
+  }
+}

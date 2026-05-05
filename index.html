@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anchor Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c1116;
+      --bg-2: #111b22;
+      --card: #141f28;
+      --card-2: #0f171e;
+      --ink: #e6f2ff;
+      --muted: #95a4b5;
+      --accent: #ff8a3d;
+      --accent-2: #2dd4bf;
+      --warn: #f97316;
+      --ok: #22c55e;
+      --danger: #ef4444;
+      --grid: rgba(255, 255, 255, 0.06);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(255, 138, 61, 0.25), transparent 60%),
+        radial-gradient(1000px 700px at 90% -20%, rgba(45, 212, 191, 0.22), transparent 55%),
+        linear-gradient(160deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+      padding: 32px 20px 48px;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .badge {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 138, 61, 0.2);
+      color: var(--accent);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 138, 61, 0.35);
+    }
+
+    h1 {
+      font-size: clamp(24px, 4vw, 36px);
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--danger);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+      transition: background 200ms ease, box-shadow 200ms ease;
+    }
+
+    .dot.ok {
+      background: var(--ok);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.04), transparent 60%), var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow);
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      pointer-events: none;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .big {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .panel {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+      gap: 16px;
+    }
+
+    .panel .card {
+      min-height: 260px;
+    }
+
+    .anchor-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .anchor {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--card-2);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+    }
+
+    .anchor .name {
+      font-weight: 600;
+    }
+
+    .anchor .meta {
+      display: flex;
+      gap: 12px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+    }
+
+    .pill.ok {
+      color: var(--ok);
+      border-color: rgba(34, 197, 94, 0.5);
+    }
+
+    .pill.warn {
+      color: var(--warn);
+      border-color: rgba(249, 115, 22, 0.5);
+    }
+
+    .target-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .target-item {
+      display: flex;
+      justify-content: space-between;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      color: var(--muted);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
+    }
+
+    .target-item span:last-child {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .map {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 70%),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 24px,
+          var(--grid) 24px,
+          var(--grid) 25px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 24px,
+          var(--grid) 24px,
+          var(--grid) 25px
+        );
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      height: 260px;
+      overflow: hidden;
+    }
+
+    .map .dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(255, 138, 61, 0.8);
+      transform: translate(-50%, -50%);
+    }
+
+    .map .anchor-dot {
+      background: var(--accent-2);
+      box-shadow: 0 0 10px rgba(45, 212, 191, 0.7);
+      width: 10px;
+      height: 10px;
+    }
+
+    .fade-in {
+      animation: fadeIn 450ms ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <span class="badge">Live RSSI</span>
+        <h1>Anchor Tracking Dashboard</h1>
+      </div>
+      <div class="status-bar">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Waiting for stream...</span>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card fade-in">
+        <h3>Anchors Online</h3>
+        <div class="big" id="anchorCount">0</div>
+        <div class="mono" id="anchorActive">Active: 0</div>
+      </div>
+      <div class="card fade-in">
+        <h3>Target Accuracy</h3>
+        <div class="big" id="accuracyValue">-- m</div>
+        <div class="mono">RMS error</div>
+      </div>
+      <div class="card fade-in">
+        <h3>Last Update</h3>
+        <div class="big" id="lastUpdate">--</div>
+        <div class="mono" id="lastUpdateMs">-- ms</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="card fade-in">
+        <h3>Anchors</h3>
+        <div class="anchor-list" id="anchorList"></div>
+      </div>
+      <div class="card fade-in">
+        <h3>Target</h3>
+        <div class="target-box">
+          <div class="target-item"><span>Latitude</span><span id="targetLat">--</span></div>
+          <div class="target-item"><span>Longitude</span><span id="targetLon">--</span></div>
+          <div class="target-item"><span>Anchors Used</span><span id="targetAnchors">--</span></div>
+        </div>
+        <div class="map" id="map"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+    const anchorCount = document.getElementById("anchorCount");
+    const anchorActive = document.getElementById("anchorActive");
+    const accuracyValue = document.getElementById("accuracyValue");
+    const lastUpdate = document.getElementById("lastUpdate");
+    const lastUpdateMs = document.getElementById("lastUpdateMs");
+    const anchorList = document.getElementById("anchorList");
+    const targetLat = document.getElementById("targetLat");
+    const targetLon = document.getElementById("targetLon");
+    const targetAnchors = document.getElementById("targetAnchors");
+    const map = document.getElementById("map");
+
+    let lastTick = 0;
+
+    function formatTime(ts) {
+      const d = new Date(ts * 1000);
+      return d.toLocaleTimeString();
+    }
+
+    function renderAnchors(anchors) {
+      anchorList.innerHTML = "";
+      const activeCount = anchors.filter(a => a.active).length;
+      anchorCount.textContent = anchors.length;
+      anchorActive.textContent = `Active: ${activeCount}`;
+
+      anchors.forEach(anchor => {
+        const row = document.createElement("div");
+        row.className = "anchor";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<div class="name">${anchor.id}</div>`;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = `<span>${anchor.rssi.toFixed(1)} dBm</span><span>${anchor.distance.toFixed(2)} m</span>`;
+
+        const pill = document.createElement("span");
+        pill.className = `pill ${anchor.active ? "ok" : "warn"}`;
+        pill.textContent = anchor.active ? "ACTIVE" : "STALE";
+
+        row.append(left, meta, pill);
+        anchorList.append(row);
+      });
+    }
+
+    function renderTarget(target, anchors) {
+      if (!target) {
+        targetLat.textContent = "--";
+        targetLon.textContent = "--";
+        targetAnchors.textContent = "--";
+        accuracyValue.textContent = "-- m";
+        map.innerHTML = "";
+        return;
+      }
+
+      targetLat.textContent = target.lat.toFixed(7);
+      targetLon.textContent = target.lon.toFixed(7);
+      targetAnchors.textContent = target.anchors_used;
+      accuracyValue.textContent = `${target.accuracy_m.toFixed(2)} m`;
+
+      const lats = anchors.map(a => a.lat).concat(target.lat);
+      const lons = anchors.map(a => a.lon).concat(target.lon);
+      const minLat = Math.min(...lats);
+      const maxLat = Math.max(...lats);
+      const minLon = Math.min(...lons);
+      const maxLon = Math.max(...lons);
+      const pad = 0.0002;
+
+      function toXY(lat, lon) {
+        const x = (lon - (minLon - pad)) / ((maxLon + pad) - (minLon - pad));
+        const y = (lat - (minLat - pad)) / ((maxLat + pad) - (minLat - pad));
+        return { x: x * 100, y: (1 - y) * 100 };
+      }
+
+      map.innerHTML = "";
+
+      anchors.forEach(anchor => {
+        const dot = document.createElement("div");
+        dot.className = "dot anchor-dot";
+        const pos = toXY(anchor.lat, anchor.lon);
+        dot.style.left = `${pos.x}%`;
+        dot.style.top = `${pos.y}%`;
+        map.append(dot);
+      });
+
+      const targetDot = document.createElement("div");
+      targetDot.className = "dot";
+      const pos = toXY(target.lat, target.lon);
+      targetDot.style.left = `${pos.x}%`;
+      targetDot.style.top = `${pos.y}%`;
+      map.append(targetDot);
+    }
+
+    function updateStatus(isLive) {
+      statusDot.classList.toggle("ok", isLive);
+      statusText.textContent = isLive ? "Live stream connected" : "Waiting for stream...";
+    }
+
+    function handlePayload(payload) {
+      if (!payload) return;
+      renderAnchors(payload.anchors || []);
+      renderTarget(payload.target, payload.anchors || []);
+
+      const now = Date.now();
+      if (payload.time) {
+        lastUpdate.textContent = formatTime(payload.time);
+      }
+      lastUpdateMs.textContent = `${Math.max(0, now - lastTick)} ms`;
+      lastTick = now;
+      updateStatus(true);
+    }
+
+    function startStream() {
+      const source = new EventSource("/stream");
+
+      source.onmessage = (event) => {
+        try {
+          const payload = JSON.parse(event.data);
+          handlePayload(payload);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      source.onerror = () => {
+        updateStatus(false);
+      };
+    }
+
+    startStream();
+  </script>
+</body>
+</html>
