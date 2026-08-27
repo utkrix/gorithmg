@@ -18,13 +18,11 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-// ─── CONFIGURE THESE FOR EACH ANCHOR ─────────────────────────────────────────
-const char* ANCHOR_ID   = "anchor1";       // Change: anchor1 / anchor2 / anchor3
-const double ANCHOR_LAT = 27.6194317;       // Set real lat of this anchor
-const double ANCHOR_LON = 85.5370376;       // Set real lon of this anchor
-// ─────────────────────────────────────────────────────────────────────────────
+const char* ANCHOR_ID   = "anchor1";     
+const double ANCHOR_LAT = 27.6194317;   
+const double ANCHOR_LON = 85.5370376;  
 
-// ─── SHARED CONFIG (same for all anchors) ─────────────────────────────────────
+// ─── SHARED CONFIG (same for all anchors) 
 const char* WIFI_SSID     = "Pahari";
 const char* WIFI_PASSWORD = "sanjay246";
 

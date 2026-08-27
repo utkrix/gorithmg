@@ -208,11 +208,16 @@ def receive_vitals():
         return jsonify({'error': 'No data'}), 400
 
     with lock:
+        raw_motion = data.get('motion', 0)
+        # Gravity is ~9.8 m/s². Motion magnitude above that threshold = movement
+        # Threshold: if magnitude deviates > 1.5 from gravity, animal is moving
+        motion_status = 'Walking' if abs(raw_motion - 9.8) > 1.5 else 'Still'
         animal_vitals = {
             'heartRate':   data.get('heartRate', -1),
             'spo2':        data.get('spo2', -1),
             'temperature': data.get('temperature', -1),
-            'motion':      data.get('motion', 0),
+            'motion':      raw_motion,
+            'motionStatus': motion_status,
             'timestamp':   time.time()
         }
     return jsonify({'status': 'ok'}), 200

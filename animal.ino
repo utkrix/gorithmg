@@ -11,7 +11,6 @@
 // Wifi
 const char *ssid = "Pahari";
 const char *password = "sanjay246";
-// Use local server IP (ESP8266 can't do HTTPS so ngrok won't work)
 const char *serverIP = "http://10.187.12.253:5000";
 const char *apiUrl = "http://10.187.12.253:5000/vitals";
 const char *fenceUrl = "http://10.187.12.253:5000/fence-status";
@@ -75,7 +74,7 @@ unsigned long lastApiSend = 0;
 
 bool enablesim = true;
 bool pulsesim = true;
-bool temsim = true;
+bool temsim = false;
 unsigned long durmin = 10000;
 unsigned long startsimmillis = 0;
 
@@ -103,7 +102,6 @@ void onBeatDetected()
   Serial.println("Beat detected!");
 }
 
-// ============================================================
 
 void setup()
 {
@@ -232,8 +230,6 @@ void loop()
 
   delay(200); // Slow down loop to ~5 Hz
 }
-
-// ============================================================
 
 //  sensor readers
 void readMPU()
